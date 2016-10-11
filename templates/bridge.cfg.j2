@@ -1,0 +1,8 @@
+auto {{ bridge.name }}
+iface {{ bridge.name }} inet static
+    # Make sure bridge-utils is installed!
+    bridge_ports {{ bridge.dummy.name }}
+    bridge_stp on
+    bridge_fd 2
+    address {{ bridge.ip }}
+    netmask {{ bridge.netmask }}

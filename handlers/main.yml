@@ -1,0 +1,21 @@
+---
+
+  - name: sysctl_reload
+    command: sysctl -p
+    become: true
+
+  - name: refresh_pool
+    command: virsh pool-refresh images
+
+  - name: network_reload
+    command: systemctl restart networking.service
+
+  - name: dnsmasq_reload
+    command: systemctl restart dnsmasq.service
+    become: true
+    ignore_errors: true
+
+  - name: iptables_reload
+    command: iptables-restore < /etc/iptables/rules.v4
+    become: true
+

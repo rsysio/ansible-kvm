@@ -1,0 +1,16 @@
+---
+
+  - name: Install base apps
+    include: install.yml
+
+  - name: setup network
+    include: network.yml
+
+  - name: configure iptables
+    include: iptables.yml
+
+  - name: setup dnsmasq
+    include: dnsmasq.yml
+
+  - name: download ubuntu image
+    include: download.yml

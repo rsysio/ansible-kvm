@@ -1,0 +1,38 @@
+---
+
+  - command: ip address show virbr0
+    register: defaultnetwork
+    ignore_errors: true
+
+  - name: remove default network
+    command: virsh net-destroy default
+    become: true
+    when: defaultnetwork|succeeded
+    register: removedefaultnetwork
+
+  - name: disable default network
+    command: virsh net-autostart --disable default
+    become: true
+    when: removedefaultnetwork.changed
+
+  - name: dummy if conf
+    template: src=dummyif.cfg.j2 dest="/etc/network/interfaces.d/10-{{ bridge.name }}-dummy.cfg"
+
+  - name: virbr10 conf
+    template: src=bridge.cfg.j2 dest="/etc/network/interfaces.d/20-{{ bridge.name }}.cfg"
+
+  - name: update interfaces conf
+    lineinfile:
+      dest=/etc/network/interfaces
+      line="source /etc/network/interfaces.d/*.cfg"
+      regexp="^source \/etc\/network\/interfaces.d\/\*\.cfg$"
+      insertafter=EOF
+    become: true
+    notify: network_reload
+
+  - name: sysctl conf
+    copy: src=sysctl.conf dest=/etc/sysctl.d/11-forward-net.conf
+    become: true
+    notify: sysctl_reload
+
+

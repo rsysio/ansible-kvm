@@ -1,0 +1,15 @@
+bridge:
+    name: virbr10
+    ip: 10.9.0.1
+    subnet: 10.9.0.0/24
+    network: 10.9.0.0
+    netmask: 255.255.255.0
+    dhcp:
+        first: 10.9.0.50
+        last: 10.9.0.230
+    dummy:
+        name: virbr10-dummy
+        mac: 52:54:00:11:22:a1
+
+
+

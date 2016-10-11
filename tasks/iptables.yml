@@ -1,0 +1,14 @@
+---
+
+  - name: remove ufw
+    apt: name=ufw state=absent
+    become: true
+
+  - name: Install iptables-restore
+    apt: name=iptables-persistent state=installed update_cache=yes install_recommends=no
+    become: true
+
+  - name: add iptables conf file
+    template: src=iptables.j2 dest=/etc/iptables/rules.v4
+    become: true
+    notify: iptables_reload
