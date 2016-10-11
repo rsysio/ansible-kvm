@@ -1,6 +1,8 @@
 # ansible-kvm
 ansible install kvm
 
+[notes](http://notes.rsys.io/post/151509090518/my-kvm-setup)
+
 ## Descritption
 
 install kvm and libvirt
