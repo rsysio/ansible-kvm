@@ -17,9 +17,11 @@
 
   - name: dummy if conf
     template: src=dummyif.cfg.j2 dest="/etc/network/interfaces.d/10-{{ bridge.name }}-dummy.cfg"
+    become: true
 
   - name: virbr10 conf
     template: src=bridge.cfg.j2 dest="/etc/network/interfaces.d/20-{{ bridge.name }}.cfg"
+    become: true
 
   - name: update interfaces conf
     lineinfile:
