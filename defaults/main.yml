@@ -1,23 +1,24 @@
+kvm_dir: /data/vms
+kvm_net: 10.9.0
 kvm:
     data:
-        dir: /data/vms
+        dir: "{{ kvm_dir }}"
     template:
-        dir: /data/vms/template
+        dir: "{{ kvm_dir }}/template"
         url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
-        image: "{{ kvm.template.dir }}/ubuntu1604.qcow2"
+        image: "{{ kvm_dir }}/template/ubuntu1604.qcow2"
     net:
-        address: 10.9.0.0
+        address: "{{ kvm_net }}.0"
         mask: 255.255.255.0
-        subnet: 10.9.0.0/24
+        subnet: "{{ kvm_net }}.0/24"
         dhcp:
-            first: 10.9.0.50
-            last: 10.9.0.230
+            first: "{{ kvm_net }}.50"
+            last: "{{ kvm_net }}.230"
         bridge:
             name: virbr10
-            ip: 10.9.0.1
+            ip: "{{ kvm_net }}.1"
         dummy:
             name: virbr10-dummy
             mac: 52:54:00:11:22:a1
-
 
 
