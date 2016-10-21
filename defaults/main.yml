@@ -2,9 +2,9 @@ kvm:
     data:
         dir: /data/vms
     template:
-        dir: {{ kvm.data.dir }}/template
+        dir: /data/vms/template
         url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
-        image: {{ kvm.template.dir }}/ubuntu1604.qcow2
+        image: "{{ kvm.template.dir }}/ubuntu1604.qcow2"
     net:
         address: 10.9.0.0
         mask: 255.255.255.0
