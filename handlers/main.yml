@@ -16,6 +16,6 @@
     ignore_errors: true
 
   - name: iptables_reload
-    command: iptables-restore < /etc/iptables/rules.v4
+    command: "iptables-restore < /etc/iptables/rules.v4"
     become: true
 
