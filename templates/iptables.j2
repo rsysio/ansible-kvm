@@ -7,7 +7,7 @@
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 # DHCP packets sent to VMs have no checksum (due to a longstanding bug).
--A POSTROUTING -o {{ bridge.name }} -p udp -m udp --dport 68 -j CHECKSUM --checksum-fill
+-A POSTROUTING -o {{ kvm.net.bridge.name }} -p udp -m udp --dport 68 -j CHECKSUM --checksum-fill
 COMMIT
 
 *nat
@@ -15,12 +15,12 @@ COMMIT
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 # Do not masquerade to these reserved address blocks.
--A POSTROUTING -s {{ bridge.subnet }} -d 224.0.0.0/24 -j RETURN
--A POSTROUTING -s {{ bridge.subnet }} -d 255.255.255.255/32 -j RETURN
+-A POSTROUTING -s {{ kvm.net.subnet }} -d 224.0.0.0/24 -j RETURN
+-A POSTROUTING -s {{ kvm.net.subnet }} -d 255.255.255.255/32 -j RETURN
 # Masquerade all packets going from VMs to the LAN/Internet.
--A POSTROUTING -s {{ bridge.subnet }} ! -d {{ bridge.subnet }} -p tcp -j MASQUERADE --to-ports 1024-65535
--A POSTROUTING -s {{ bridge.subnet }} ! -d {{ bridge.subnet }} -p udp -j MASQUERADE --to-ports 1024-65535
--A POSTROUTING -s {{ bridge.subnet }} ! -d {{ bridge.subnet }} -j MASQUERADE
+-A POSTROUTING -s {{ kvm.net.subnet }} ! -d {{ kvm.net.subnet }} -p tcp -j MASQUERADE --to-ports 1024-65535
+-A POSTROUTING -s {{ kvm.net.subnet }} ! -d {{ kvm.net.subnet }} -p udp -j MASQUERADE --to-ports 1024-65535
+-A POSTROUTING -s {{ kvm.net.subnet }} ! -d {{ kvm.net.subnet }} -j MASQUERADE
 COMMIT
 
 *filter
@@ -34,20 +34,20 @@ COMMIT
 # Accept SSH connections.
 -A INPUT -p tcp -m tcp --syn -m conntrack --ctstate NEW --dport 22 -j ACCEPT
 # Accept DNS (port 53) and DHCP (port 67) packets from VMs.
--A INPUT -i {{ bridge.name }} -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
--A INPUT -i {{ bridge.name }} -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
+-A INPUT -i {{ kvm.net.bridge.name }} -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
+-A INPUT -i {{ kvm.net.bridge.name }} -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
 # Reject everything else.
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p tcp -m tcp -j REJECT --reject-with tcp-reset
 -A INPUT -j REJECT --reject-with icmp-port-unreachable
 
 # Allow established traffic to the private subnet.
--A FORWARD -d {{ bridge.subnet }} -o {{ bridge.name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -d {{ kvm.net.subnet }} -o {{ kvm.net.bridge.name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 # Allow outbound traffic from the private subnet.
--A FORWARD -s {{ bridge.subnet }} -i {{ bridge.name }} -j ACCEPT
+-A FORWARD -s {{ kvm.net.subnet }} -i {{ kvm.net.bridge.name }} -j ACCEPT
 # Allow traffic between virtual machines.
--A FORWARD -i {{ bridge.name }} -o {{ bridge.name }} -j ACCEPT
+-A FORWARD -i {{ kvm.net.bridge.name }} -o {{ kvm.net.bridge.name }} -j ACCEPT
 # Reject everything else.
--A FORWARD -i {{ bridge.name }} -j REJECT --reject-with icmp-port-unreachable
--A FORWARD -o {{ bridge.name }} -j REJECT --reject-with icmp-port-unreachable
+-A FORWARD -i {{ kvm.net.bridge.name }} -j REJECT --reject-with icmp-port-unreachable
+-A FORWARD -o {{ kvm.net.bridge.name }} -j REJECT --reject-with icmp-port-unreachable
 COMMIT

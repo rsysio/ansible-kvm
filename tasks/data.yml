@@ -1,0 +1,11 @@
+---
+
+  - name: create data dir
+    file: path={{ kvm.data.dir }} state=directory mode=0755
+
+  - name: create template dir
+    file: path={{ kvm.template.dir }} state=directory mode=0755
+
+  - name: download template
+    get_url: url={{ kvm.template.url }} dest={{ kvm.template.image }}
+

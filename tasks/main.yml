@@ -13,4 +13,4 @@
     include: dnsmasq.yml
 
   - name: download ubuntu image
-    include: download.yml
+    include: data.yml

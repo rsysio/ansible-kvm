@@ -10,9 +10,9 @@
     notify: dnsmasq_reload
 
   - name: create hosts file
-    command: "touch /var/lib/libvirt/dnsmasq/{{ bridge.name }}.hostsfile"
+    command: "touch /var/lib/libvirt/dnsmasq/{{ kvm.net.bridge.name }}.hostsfile"
     args:
-      creates: "/var/lib/libvirt/dnsmasq/{{ bridge.name }}.hostsfile"
+      creates: "/var/lib/libvirt/dnsmasq/{{ kvm.net.bridge.name }}.hostsfile"
     become: true
 
   - name: install dnsmasq
