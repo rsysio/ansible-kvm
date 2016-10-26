@@ -1,4 +1,4 @@
-kvm_dir: /data/vms
+kvm_dir: ~/.vms
 kvm_net: 10.9.0
 kvm:
     data:
