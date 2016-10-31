@@ -1,9 +1,7 @@
 ---
 
   - name: check vms
-    include: 'vm.yml'
-    vars:
-        vm: {{ item }}
+    shell: virsh list --all | grep {{ item.name }}
     with_items: kvm_vms
 
 
