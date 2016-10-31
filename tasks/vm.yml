@@ -1,0 +1,5 @@
+---
+
+  - name: check vm exists
+    command: virsh list --all | grep "{{ vm.name }}"
+

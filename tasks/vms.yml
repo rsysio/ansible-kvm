@@ -1,0 +1,8 @@
+---
+
+  - name: check vms
+    include: 'vm.yml vm="{{ item }}"'
+    with: kvm_vms
+
+
+

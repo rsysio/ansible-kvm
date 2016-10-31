@@ -1,24 +1,27 @@
-kvm_dir: ~/.vms
-kvm_net: 10.9.0
-kvm:
-    data:
-        dir: "{{ kvm_dir }}"
-    template:
-        dir: "{{ kvm_dir }}/template"
-        url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
-        image: "{{ kvm_dir }}/template/ubuntu1604.qcow2"
-    net:
-        address: "{{ kvm_net }}.0"
-        mask: 255.255.255.0
-        subnet: "{{ kvm_net }}.0/24"
-        dhcp:
-            first: "{{ kvm_net }}.50"
-            last: "{{ kvm_net }}.230"
-        bridge:
-            name: virbr10
-            ip: "{{ kvm_net }}.1"
-        dummy:
-            name: virbr10-dummy
-            mac: 52:54:00:11:22:a1
-
+---
+kvm_vm_dir: ~/.vms
+kvm_template:
+    dir: "{{ kvm_vm_dir }}/template"
+    url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+    image: "{{ kvm_vm_dir }}/template/ubuntu1604.qcow2"
+kvm_netocts: 10.9.0
+kvm_net:
+    address: "{{ kvm_netocts }}.0"
+    mask: 255.255.255.0
+    subnet: "{{ kvm_netocts }}.0/24"
+    dhcp:
+        first: "{{ kvm_netocts }}.50"
+        last: "{{ kvm_netocts }}.230"
+    bridge:
+        name: virbr10
+        ip: "{{ kvm_netocts }}.1"
+    dummy:
+        name: virbr10-dummy
+        mac: 52:54:00:11:22:a1
+kvm_vms:
+  - name: node1
+    cpu: 1
+    ram: 512
+    mac: "52:54:00:b7:bc:ee"
+    ip: "{{ kvm_netocts }}.100"
 

@@ -1,4 +1,4 @@
-auto {{ kvm.net.dummy.name }}
-iface {{ kvm.net.dummy.name }} inet manual
-    pre-up /sbin/ip link add {{ kvm.net.dummy.name }} type dummy
-    up /sbin/ip link set {{ kvm.net.dummy.name }} address {{ kvm.net.dummy.mac }}
+auto {{ kvm_net.dummy.name }}
+iface {{ kvm_net.dummy.name }} inet manual
+    pre-up /sbin/ip link add {{ kvm_net.dummy.name }} type dummy
+    up /sbin/ip link set {{ kvm_net.dummy.name }} address {{ kvm_net.dummy.mac }}
