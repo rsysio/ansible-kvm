@@ -4,7 +4,7 @@
     include: 'vm.yml'
     vars:
         vm: {{ item }}
-    with: kvm_vms
+    with_items: kvm_vms
 
 
 
