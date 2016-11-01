@@ -1,8 +1,0 @@
----
-
-  - name: check vms
-    shell: virsh list --all | grep {{ item.name }}
-    with_items: kvm_vms
-
-
-

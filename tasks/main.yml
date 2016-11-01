@@ -16,4 +16,4 @@
     include: data.yml
 
   - name: manage vms
-    include: vms.yml
+    include: managevms.yml
