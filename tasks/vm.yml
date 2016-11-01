@@ -7,7 +7,7 @@
     register: vm_image_file
 
   - name: copy image
-    copy: "src={{ kvm_template.image }} dst={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
+    copy: "src={{ kvm_template.image }} dest={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
     when: vm_image_file.stat.exists == False
 
   - name: check vms
