@@ -9,7 +9,7 @@
     lineinfile:
       dest=/var/lib/libvirt/dnsmasq/virbr10.hostsfile
       line="{{ vm.mac }},{{ vm.ip }}"
-      regexp="^(.*),{{ vm.ip }}$"
+      regexp="^{{ vm.mac }},{{ vm.ip }}$"
     become: true
 
   - name: create vm dir
