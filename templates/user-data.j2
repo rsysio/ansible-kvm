@@ -1,0 +1,6 @@
+#cloud-config
+packages:
+  - language-pack-en
+hostname: {{ vm.name }}
+fqdn: {{ vm.name }}.{{ kvm_domain_name }}
+manage_etc_hosts: true
