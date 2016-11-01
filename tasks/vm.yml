@@ -9,6 +9,7 @@
 
   - name: resize image
     command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
+    when: image_file.changed
 
 
 
