@@ -1,0 +1,7 @@
+---
+
+  - name: manage VMs
+    include: vm.yml
+    loop_control:
+        loop_var: vm
+    with_dict: kvm_vms

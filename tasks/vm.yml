@@ -1,0 +1,19 @@
+---
+
+  - name: create vm dir
+    file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
+    with_dict: kvm_vms
+
+  - stat: path={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2
+    register: vm_image_file
+
+  - name: copy image
+    copy: src="{{ kvm_template.image }}" dst="{{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
+    when: vm_image_file.stat.exists == False
+
+  - name: check vms
+    shell: "virsh list --all | grep {{ vm.name }}"
+    with_dict: kvm_vms
+
+
+
