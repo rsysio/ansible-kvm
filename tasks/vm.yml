@@ -3,11 +3,11 @@
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
 
-  - stat: path={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2
+  - stat: "path={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
     register: vm_image_file
 
   - name: copy image
-    copy: src="{{ kvm_template.image }}" dst="{{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
+    copy: "src={{ kvm_template.image }} dst={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
     when: vm_image_file.stat.exists == False
 
   - name: check vms
