@@ -2,7 +2,6 @@
 
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
-    with_dict: kvm_vms
 
   - stat: path={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2
     register: vm_image_file
@@ -13,7 +12,6 @@
 
   - name: check vms
     shell: "virsh list --all | grep {{ vm.name }}"
-    with_dict: kvm_vms
 
 
 

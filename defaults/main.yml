@@ -19,10 +19,9 @@ kvm_net:
         name: virbr10-dummy
         mac: 52:54:00:11:22:a1
 kvm_vms:
-    vm0:
-        name: node0
-        cpu: 1
-        ram: 512
-        mac: "52:54:00:b7:bc:ee"
-        ip: "{{ kvm_netocts }}.100"
+  - name: node0
+    cpu: 1
+    ram: 512
+    mac: "52:54:00:b7:bc:ee"
+    ip: "{{ kvm_netocts }}.100"
 
