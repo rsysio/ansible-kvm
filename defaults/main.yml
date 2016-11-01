@@ -20,6 +20,7 @@ kvm_net:
         mac: 52:54:00:11:22:a1
 kvm_vms:
   - name: node0
+    disk: 20
     cpu: 1
     ram: 512
     mac: "52:54:00:b7:bc:ee"

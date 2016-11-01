@@ -1,17 +1,14 @@
 ---
 
-  - name: check if vm exists
-    shell: virsh list --all | grep {{ vm.name }}
-    register: vm_exists
-
-  - debug: msg=vm_exists
-
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
 
   - name: copy vm template
-    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2 creates={{ kvm_vm_dir }}/{{ vm.name }}/image.qcow2"
+    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 creates={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
+    register: image_file
 
-  - name: check image size
+  - name: resize image
+    command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
+
 
 
