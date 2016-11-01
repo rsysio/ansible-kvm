@@ -5,6 +5,13 @@
     ignore_errors: true
     register: vm_exists
 
+  - name: reserve IP address
+    lineinfile:
+      dest=/var/lib/libvirt/dnsmasq/virbr10.hostsfile
+      line="{{ vm.mac }},{{ vm.ip }}"
+      regexp="^{{ vm.mac }},{{ vm.ip }}$"
+    become: true
+
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
     when: vm_exists|failed
