@@ -19,11 +19,11 @@
     when: image_file.changed and vm_exists.failed
 
   - name: create meta-data file
-    template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data creates={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
+    template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
     when: vm_exists.failed
 
   - name: create meta-data file
-    template: "src=user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data creates={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    template: "src=user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
     when: vm_exists.failed
 
   - name: create config.iso
