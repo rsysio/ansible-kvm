@@ -4,4 +4,4 @@
     include: vm.yml
     loop_control:
         loop_var: vm
-    with_subelements: kvm_vms
+    with_dict: kvm_vms
