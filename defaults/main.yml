@@ -1,5 +1,5 @@
 ---
-kvm_vm_dir: ~/.vms
+kvm_vm_dir: "{{ ansible_env.HOME }}/.vms"
 kvm_domain_name: example.com
 kvm_template:
     dir: "{{ kvm_vm_dir }}/template"
