@@ -7,7 +7,7 @@
 
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
-    when: vm_exists.failed
+    when: "vm_exists.rc != 0"
 
   - name: copy vm template
     command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 creates={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
