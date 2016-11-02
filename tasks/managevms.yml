@@ -20,7 +20,7 @@
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_delete_vms }}"
-    when: "{{ item.name }} in {{ existing_vms.stdout_lines }}"
+    when: "{{ vm.name }} in {{ existing_vms.stdout_lines }}"
 
   - name: manage VMs
     include: vm.yml
