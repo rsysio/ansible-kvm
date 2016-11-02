@@ -12,6 +12,7 @@
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_delete_vms }}"
+    when: kvm_delete_vms|length > 0
 
 
   - name: manage VMs
@@ -19,6 +20,7 @@
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_vms }}"
+    when: kvm_vms|length > 0
 
 
 
