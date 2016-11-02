@@ -11,15 +11,12 @@
     shell: "virsh list --all | grep -v '^$' | awk 'NR>2 {print $2}'"
     register: existing_vms
 
-  - name: print existing VMs
-    debug: "msg={{ existing_vms.stdout_lines }}"
-
   - name: delete VMs
     include: del_vm.yml
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_delete_vms }}"
-    when: "{{ vm.name }} in {{ existing_vms.stdout_lines }}"
+    when: "{{ item.name }} in {{ existing_vms.stdout_lines }}"
 
   - name: manage VMs
     include: vm.yml
