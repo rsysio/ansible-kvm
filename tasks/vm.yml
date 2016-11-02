@@ -7,10 +7,11 @@
 
   - name: reserve IP address
     lineinfile:
-      dest=/var/lib/libvirt/dnsmasq/virbr10.hostsfile
+      dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile
       line="{{ vm.mac }},{{ vm.ip }}"
       regexp="^{{ vm.mac }},{{ vm.ip }}$"
     become: true
+    when: vm_exists|failed
 
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
@@ -42,16 +43,17 @@
     command: >
         virt-install \
             --name {{ vm.name }} \
-            --vcpus={{ vm.cpu }} \
+            --vcpus {{ vm.cpu }} \
             --ram {{ vm.ram }} \
             --hvm \
-            --autostart \
-            --network bridge:virbr10,mac={{ vm.mac }} \
-            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
-            --import \
-            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --cpu host \
             --os-type=linux \
             --os-variant=ubuntu16.04 \
+            --network bridge:virbr10,mac={{ vm.mac }} \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
+            --import \
+            --autostart \
             --nographics \
             --noautoconsole
     when: config_iso.changed and vm_exists|failed
