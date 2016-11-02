@@ -5,6 +5,8 @@
     become: true
     notify: dnsmasq_reload
 
+  - meta: flush_handlers
+
   - name: manage VMs
     include: vm.yml
     loop_control:
