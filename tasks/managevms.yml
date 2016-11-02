@@ -15,15 +15,13 @@
     include: del_vm.yml
     loop_control:
         loop_var: vm
-    with_items: "{{ kvm_delete_vms }}"
-    when: "{{ item.name }} in {{ existing_vms.stdout_lines }}"
+    with_items: "{{ kvm_vms }}"
+    when: vm.name not in existing_vms.stdout_lines
 
-  - name: manage VMs
+  - name: create VMs
     include: vm.yml
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_vms }}"
-
-
 
 
