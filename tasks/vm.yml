@@ -5,15 +5,6 @@
     ignore_errors: true
     register: vm_exists
 
-  - name: reserve IP address
-    lineinfile:
-      dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile
-      line="{{ vm.mac }},{{ vm.ip }}"
-      regexp="^{{ vm.mac }},{{ vm.ip }}$"
-    become: true
-    when: vm_exists|failed
-    notify: dnsmasq_reload
-
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
     when: vm_exists|failed
