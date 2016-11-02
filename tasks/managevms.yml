@@ -7,6 +7,14 @@
 
   - meta: flush_handlers
 
+  - name: get existing VMs
+    shell: "virsh list --all | grep -v '^$' | awk 'NR>2 {print $2}'"
+    register: existing_vms
+
+  - name: print existing VMs
+    debug: msg={{ item }}
+    with_items: "{{ existing_vms.stdout_lines }}"
+
   - name: delete VMs
     include: del_vm.yml
     loop_control:
