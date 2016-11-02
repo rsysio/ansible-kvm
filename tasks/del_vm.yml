@@ -1,0 +1,19 @@
+---
+
+  - name: check if VM exists
+    command: virsh dominfo {{ vm }}
+    ignore_errors: true
+    register: vm_exists
+
+  - name: destroy VM
+    command: virsh destroy {{ vm }}
+    when: vm_exists|succeeded
+
+  - name: undefine VM
+    command: virsh undefine {{ vm }}
+    when: vm_exists|succeeded
+
+  - name: delete VM files
+    file: path={{ kvm_vm_dir }}/{{ vm }} state=absent recurse=yes
+
+

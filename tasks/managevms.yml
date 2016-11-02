@@ -7,6 +7,13 @@
 
   - meta: flush_handlers
 
+  - name: delete VMs
+    include: del_vm.yml
+    loop_control:
+        loop_var: vm
+    with_items: "{{ kvm_delete_vms }}"
+
+
   - name: manage VMs
     include: vm.yml
     loop_control:

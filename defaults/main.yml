@@ -33,3 +33,5 @@ kvm_vms:
     mac: "52:54:00:b7:bc:ee"
     ip: "{{ kvm_netocts }}.100"
 
+kvm_delete_vms:
+  - vm1
