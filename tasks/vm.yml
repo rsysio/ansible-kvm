@@ -12,6 +12,7 @@
       regexp="^{{ vm.mac }},{{ vm.ip }}$"
     become: true
     when: vm_exists|failed
+    notify: dnsmasq_reload
 
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
