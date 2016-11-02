@@ -1,7 +1,7 @@
 ---
 
   - name: reserve IP address
-    template: src=dnsmasq.resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile
+    template: "src=dnsmasq.resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
     become: true
     notify: dnsmasq_reload
 
@@ -12,8 +12,7 @@
     register: existing_vms
 
   - name: print existing VMs
-    debug: msg={{ item }}
-    with_items: "{{ existing_vms.stdout_lines }}"
+    debug: "msg={{ existing_vms.stdout_lines }}"
 
   - name: delete VMs
     include: del_vm.yml
