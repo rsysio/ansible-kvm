@@ -14,6 +14,7 @@
     when: vm_exists|succeeded
 
   - name: delete VM files
-    file: path={{ kvm_vm_dir }}/{{ vm }} state=absent recurse=yes
+    file: path={{ kvm_vm_dir }}/{{ vm }} state=absent
+    ignore_errors: true
 
 
