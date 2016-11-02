@@ -1,0 +1,4 @@
+instance-id: {{ vm.name }}
+local-hostname: {{ vm.name }}
+public-keys:
+  - {{ lookup('file', '~/.ssh/id_rsa.pub') }}

@@ -1,0 +1,51 @@
+---
+
+  - name: check if VM exists
+    command: virsh dominfo {{ vm.name }}
+    ignore_errors: true
+    register: vm_exists
+
+  - name: create vm dir
+    file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
+    when: vm_exists|failed
+
+  - name: copy vm template
+    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 creates={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
+    register: image_file
+    when: vm_exists|failed
+
+  - name: resize image
+    command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
+    when: image_file.changed and vm_exists|failed
+
+  - name: create meta-data file
+    template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
+    when: vm_exists|failed
+
+  - name: create meta-data file
+    template: "src=user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    when: vm_exists|failed
+
+  - name: create config.iso
+    command: "genisoimage -o {{ kvm_vm_dir }}/{{ vm.name }}/config.iso -V cidata -r -J {{ kvm_vm_dir }}/{{ vm.name }}/meta-data {{ kvm_vm_dir }}/{{ vm.name }}/user-data creates={{ kvm_vm_dir }}/{{ vm.name }}/config.iso"
+    register: config_iso
+    when: vm_exists|failed
+
+  - name: create VM
+    command: >
+        virt-install \
+            --name {{ vm.name }} \
+            --vcpus {{ vm.cpu }} \
+            --ram {{ vm.ram }} \
+            --hvm \
+            --cpu host \
+            --os-type=linux \
+            --os-variant=ubuntu16.04 \
+            --network bridge:virbr10,mac={{ vm.mac }} \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
+            --import \
+            --autostart \
+            --nographics \
+            --noautoconsole
+    when: config_iso.changed and vm_exists|failed
