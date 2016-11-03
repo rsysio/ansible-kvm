@@ -9,5 +9,6 @@
   - name: delete VM files
     file: "path={{ kvm_vm_dir }}/{{ vm }} state=absent"
     ignore_errors: true
+    become: true
 
 
