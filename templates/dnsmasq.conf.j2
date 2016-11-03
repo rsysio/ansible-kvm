@@ -1,7 +1,6 @@
 # Only bind to the virtual bridge. This avoids conflicts with other running
 # dnsmasq instances.
-except-interface=lo
-interface={{ kvm_net.bridge.name }}
+except-interface=eth0
 bind-dynamic
 
 addn-hosts=/etc/dnsmasq.hosts
