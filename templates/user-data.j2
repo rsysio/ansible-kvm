@@ -1,7 +1,6 @@
 #cloud-config
 hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
-manage_etc_hosts: true
 {{ kvm_vms_user_data }}
 {% if vm.user_data is defined %}
 {{ vm.user_data }}
