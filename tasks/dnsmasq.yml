@@ -9,6 +9,11 @@
     become: true
     notify: dnsmasq_reload
 
+  - name: add hosts file
+    template: src=dnsmasq.hosts.j2 dest=/etc/dnsmasq.hosts
+    become: true
+    notify: dnsmasq_reload
+
   - name: create hosts file
     command: "touch /var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
     args:

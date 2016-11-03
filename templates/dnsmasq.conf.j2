@@ -4,6 +4,8 @@ except-interface=lo
 interface={{ kvm_net.bridge.name }}
 bind-dynamic
 
+addn-hosts=/etc/dnsmasq.hosts
+
 # IPv4 addresses to offer to VMs. This should match the chosen subnet.
 dhcp-range={{ kvm_net.dhcp.first }},{{ kvm_net.dhcp.last }},1h
 

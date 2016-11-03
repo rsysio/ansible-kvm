@@ -1,0 +1,5 @@
+{% for vm in kvm_vms %}
+{% if vm.ip %}
+{{ vm.ip }} {{ vm.name }} {{ vm.name }}.{{ kvm_domain_name }}
+{% endif %}
+{% endfor %}
