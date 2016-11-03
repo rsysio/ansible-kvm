@@ -31,7 +31,7 @@ kvm_vms_meta_data: >
 kvm_vms_user_data: >
     chpasswd:
         list: |
-            ubuntu:ubuntu
+            ubuntu:password
 
 # define VMs
 kvm_vms:

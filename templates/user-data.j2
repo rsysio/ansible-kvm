@@ -2,9 +2,8 @@
 hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 manage_etc_hosts: true
+{{ kvm_vms_user_data }}
 {% if vm.user_data %}
 {{ vm.user_data }}
-{% else %}
-{{ kvm_vms_user_data }}
 {% endif %}
 
