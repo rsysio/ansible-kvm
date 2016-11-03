@@ -24,6 +24,11 @@ kvm_net:
         name: virbr10-dummy
         mac: 52:54:00:11:22:a1
 
+kvm_vms_user_data:
+    chpasswd:
+        list: |
+            ubuntu:ubuntu
+
 # define VMs
 kvm_vms:
   - name: vm0
