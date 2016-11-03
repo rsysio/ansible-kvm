@@ -13,12 +13,15 @@
 
   - name: create meta-data file
     template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
+    register: user-data
 
   - name: create meta-data file
     template: "src=user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    register: meta-data
 
   - name: create config.iso
     command: "genisoimage -o {{ kvm_vm_dir }}/{{ vm.name }}/config.iso -V cidata -r -J {{ kvm_vm_dir }}/{{ vm.name }}/meta-data {{ kvm_vm_dir }}/{{ vm.name }}/user-data creates={{ kvm_vm_dir }}/{{ vm.name }}/config.iso"
+    when: meta-data.changed or user-data.changed
 
   - name: create VM
     command: >
