@@ -25,12 +25,12 @@ kvm_net:
         mac: 52:54:00:11:22:a1
 
 # global meta-data
-# kvm_meta_data: >
+# kvm_meta_data: |
 #    public-keys:
 #       - {{ lookup('file', './files/skynet.key.pub') }}
 
 # global user-data
-# kvm_user_data: >
+# kvm_user_data: |
 #    chpasswd:
 #        list: |
 #            ubuntu:password
