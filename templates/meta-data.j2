@@ -1,4 +1,9 @@
 instance-id: {{ vm.name }}
+hostname: {{ vm.name }}
 local-hostname: {{ vm.name }}
-public-keys:
-  - {{ lookup('file', '~/.ssh/id_rsa.pub') }}
+public-hostname: {{ vm.name }}.{{ kvm_domain_name }}
+{% if vm.user_data %}
+{{ vm.meta_data }}
+{% else %}
+{{ kvm_vms_meta_data }}
+{% endif %}
