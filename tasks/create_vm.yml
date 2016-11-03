@@ -6,10 +6,12 @@
   - name: copy vm template
     command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
     register: image_file
+    become: true
 
   - name: resize image
     command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
     when: image_file.changed
+    become: true
 
   - name: create meta-data file
     template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
