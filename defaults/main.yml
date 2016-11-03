@@ -24,13 +24,16 @@ kvm_net:
         name: virbr10-dummy
         mac: 52:54:00:11:22:a1
 
-# reset user password
-kvm_vms_user_data: >
-    ssh_authorized_keys:
-        - {{ lookup('file', '~/.ssh/id_rsa.pub') }}
-    chpasswd:
-        list: |
-            ubuntu:password
+# global meta-data
+# kvm_meta_data: >
+#    public-keys:
+#       - {{ lookup('file', './files/skynet.key.pub') }}
+
+# global user-data
+# kvm_user_data: >
+#    chpasswd:
+#        list: |
+#            ubuntu:password
 
 # define VMs
 kvm_vms:
