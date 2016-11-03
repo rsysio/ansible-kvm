@@ -3,6 +3,6 @@ hostname: {{ vm.name }}
 local-hostname: {{ vm.name }}
 public-hostname: {{ vm.name }}.{{ kvm_domain_name }}
 {{ kvm_vms_meta_data }}
-{% if vm.meta_data %}
+{% if vm.meta_data is defined %}
 {{ vm.meta_data }}
 {% endif %}
