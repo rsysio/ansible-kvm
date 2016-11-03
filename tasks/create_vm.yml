@@ -4,7 +4,7 @@
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
 
   - name: copy vm template
-    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 creates={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
+    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
     register: image_file
 
   - name: resize image
