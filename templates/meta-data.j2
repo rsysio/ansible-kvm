@@ -2,6 +2,4 @@ instance-id: {{ vm.name }}
 local-hostname: {{ vm.name }}
 {% if vm.meta_data is defined %}
 {{ vm.meta_data }}
-{% else %}
-{{ kvm_vms_meta_data }}
 {% endif %}
