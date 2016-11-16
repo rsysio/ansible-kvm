@@ -1,5 +1,6 @@
 #cloud-config
-hostname: {{ vm.name }}.{{ kvm_domain_name }}
+hostname: {{ vm.name }}
+fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 {% if kvm_user_data is defined %}
 {{ kvm_user_data }}
 {% endif %}
