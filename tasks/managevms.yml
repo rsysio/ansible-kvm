@@ -1,7 +1,7 @@
 ---
 
   - name: reserve IP address
-    template: "src=dnsmasq.resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
+    template: "src=dnsmasq/resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
     become: true
     notify: dnsmasq_reload
     tags: vms
