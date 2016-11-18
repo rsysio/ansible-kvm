@@ -49,7 +49,7 @@
             --autostart \
             --nographics \
             --noautoconsole
-    when: wm.mac is defined
+    when: vm.mac is defined
     tags: vms
 
   - name: create VM
@@ -69,6 +69,6 @@
             --autostart \
             --nographics \
             --noautoconsole
-    when: wm.mac is not defined
+    when: vm.mac is not defined
     tags: vms
 
