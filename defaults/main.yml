@@ -15,7 +15,7 @@ kvm_net:
     mask: 255.255.255.0
     subnet: "{{ kvm_netocts }}.0/24"
     dhcp:
-        first: "{{ kvm_netocts }}.50"
+        first: "{{ kvm_netocts }}.150"
         last: "{{ kvm_netocts }}.230"
     bridge:
         name: virbr10
