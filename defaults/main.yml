@@ -27,7 +27,7 @@ kvm_net:
 # global meta-data
 # kvm_meta_data: |
 #    public-keys:
-#       - {{ lookup('file', './files/skynet.key.pub') }}
+#       - {{ lookup('file', './files/key.pub') }}
 
 # global user-data
 # kvm_user_data: |
