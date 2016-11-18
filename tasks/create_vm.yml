@@ -32,6 +32,26 @@
     become: true
     tags: vms
 
+  - name: create VM mac
+    command: >
+        virt-install \
+            --name {{ vm.name }} \
+            --vcpus {{ vm.cpu }} \
+            --ram {{ vm.ram }} \
+            --hvm \
+            --cpu host \
+            --os-type=linux \
+            --os-variant=ubuntu16.04 \
+            --network bridge:{{ kvm_net.bridge.name }},mac={{ vm.mac }} \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
+            --import \
+            --autostart \
+            --nographics \
+            --noautoconsole
+    when: wm.mac is defined
+    tags: vms
+
   - name: create VM
     command: >
         virt-install \
@@ -42,12 +62,13 @@
             --cpu host \
             --os-type=linux \
             --os-variant=ubuntu16.04 \
-            --network bridge:virbr10,mac={{ vm.mac }} \
+            --network bridge:{{ kvm_net.bridge.name }} \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
             --import \
             --autostart \
             --nographics \
             --noautoconsole
+    when: wm.mac is not defined
     tags: vms
 
