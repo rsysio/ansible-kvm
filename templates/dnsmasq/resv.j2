@@ -1,5 +1,5 @@
-{% for vm in kvm_vms %}
-{% if vm.ip and vm.mac %}
-{{ vm.mac }},{{ vm.ip }}
+{% for vms in kvm_vms %}
+{% if vms.ip and vms.mac %}
+{{ vms.mac }},{{ vms.ip }}
 {% endif %}
 {% endfor %}
