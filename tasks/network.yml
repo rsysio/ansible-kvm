@@ -16,11 +16,11 @@
     when: removedefaultnetwork.changed
 
   - name: dummy if conf
-    template: src=dummyif.cfg.j2 dest="/etc/network/interfaces.d/10-{{ kvm_net.dummy.name }}.cfg"
+    template: src=network/dummyif.cfg.j2 dest="/etc/network/interfaces.d/10-{{ kvm_net.dummy.name }}.cfg"
     become: true
 
   - name: virbr10 conf
-    template: src=bridge.cfg.j2 dest="/etc/network/interfaces.d/20-{{ kvm_net.bridge.name }}.cfg"
+    template: src=network/bridge.cfg.j2 dest="/etc/network/interfaces.d/20-{{ kvm_net.bridge.name }}.cfg"
     become: true
 
   - name: update interfaces conf

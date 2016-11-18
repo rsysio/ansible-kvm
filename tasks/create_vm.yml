@@ -17,12 +17,12 @@
     tags: vms
 
   - name: create meta-data file
-    template: "src=meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
+    template: "src=vm/meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
     register: user_data
     tags: vms
 
   - name: create meta-data file
-    template: "src=user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    template: "src=vm/user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
     register: meta_data
     tags: vms
 
