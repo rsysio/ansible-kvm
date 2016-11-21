@@ -2,6 +2,8 @@
 hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 manage_etc_hosts: true
+bootcmd:
+  - ['sed', '-i', '/send host-name = gethostname();/c\send host-name = {{ vm.name }};', '/etc/dhcp/dhclient.conf']
 {% if kvm_user_data is defined %}
 {{ kvm_user_data }}
 {% endif %}
