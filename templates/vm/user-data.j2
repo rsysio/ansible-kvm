@@ -3,7 +3,10 @@ hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 manage_etc_hosts: true
 bootcmd:
+  - echo {{ vm.name }} > /etc/hostname
   - sysctl kernel.hostname={{ vm.name }}
+  - hostname {{ vm.name }}
+  - systemctl restart networking.service
 {% if kvm_user_data is defined %}
 {{ kvm_user_data }}
 {% endif %}
