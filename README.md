@@ -1,110 +1,57 @@
-# ansible-kvm
-ansible install kvm
+ansible-kvm
+=========
 
-[notes](http://notes.rsys.io/post/151509090518/my-kvm-setup)
+Install qemu-kvm and dependencies on ubuntu 16.04
+Create and delete VMs
 
-[github](https://github.com/rsysio/ansible-kvm)
+Requirements
+------------
 
-## Goal
+Ubuntu 16.04
+Not tested on redhat or fedora and wouldn't expect it to work as is
 
-Install and configure KVM.
+Role Variables
+--------------
 
-## Requirements
+see `defaults/main.yml` for details.
 
-* Ubuntu 16.04
+Dependencies
+------------
 
-## tasks
+Not dependent on any other roles
 
-    install.yml
+Example Playbook
+----------------
 
-#### packages
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-* *virtinst* - installs `virt-install` command to create VMs
-* *libosinfo-bin* - this is to list `--os-variant` options for `virt-install`
-* *genisoimage* - to generate iso images with user-data and meta-data (can do cloud-init)
-* *libvirt-dev* - i need this to interact with libvirt from [go](https://github.com/rgbkrk/libvirt-go)
+VM definition
+```
+kvm_vms:
+# dynamic IP
+  - name: node0
+    disk: 100
+    cpu: 1
+    ram: 1024
+# static IP
+  - name: node1
+    disk: 100
+    cpu: 2
+    ram: 2048
+    mac: 11:22:33:44:55:66
+    ip: 1.1.1.1
+```
 
-network:
-
-    network.yml
-    dnsmasq.yml
-    iptables.yml
-
-The network config is trying to capture the steps from [jamielinux.com](https://jamielinux.com/docs/libvirt-networking-handbook/custom-nat-based-network.html) 
-
-    download.yml
-
-This will download an Ubuntu image to be used as a template.
+Removing a VM definition from the list will remove the VM with `virsh destroy [name]`
 
 
-# Create VM
+License
+-------
 
-## Create user-data
+MIT
 
-Create the files `meta-data` and `user-data` with the following
+Author Information
+------------------
 
-    VM_NAME=myVM
+rsys.io
 
-    SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
-    cat  meta-data
-    instance-id: ${VM_NAME}
-    local-hostname: ${VM_NAME}
-    public-keys:
-      - ${SSH_KEY}
-    EOT
-
-    cat  user-data
-    #cloud-config
-    packages:
-      - language-pack-en
-    hostname: ${VM_NAME}
-    fqdn: ${VM_NAME}.rsys.io
-    manage_etc_hosts: true
-    EOT
-
-Create user-data iso image
-
-    genisoimage -o config.iso -V cidata -r -J meta-data user-data
-
-## Images
-
-To check the image info:
-
-    qemu-img info xenial.img
-
-Copy and resize the image:
-
-    cp xenial.img ~/.vms/myVM.qcow2
-
-Resize image
-
-    qemu-img resize ~/.vms/myVM.qcow2 +20
-
-## Create VM
-
-    virt-install \
-    	--name myVM \
-    	--vcpus=2 \
-    	--ram 2048 \
-     	--accelerate \
-    	--network bridge:virbr10,mac=52:54:00:b7:bc:b9 \
-    	--disk path=~/.vms/myVM.qcow2,format=qcow2 \
-    	--import \
-    	--disk path=config.iso,device=cdrom \
-     	--os-type=linux \
-    	--os-variant=ubuntu16.04 \
-    	--nographics \
-    	--noautoconsole
-
-## Check
-
-Check your VM running
-
-    virsh list --all
-
-Check dnsmasq resevations
-
-    cat /var/lib/libvirt/dnsmasq/virbr10.leases
-
-At this point I can ssh into the VM
-I can also do `virsh console myVM` to see the console output
