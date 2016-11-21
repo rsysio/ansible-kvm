@@ -3,7 +3,7 @@ hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 manage_etc_hosts: true
 bootcmd:
-  - hostname {{ vm.name }}
+  - sysctl kernel.hostname={{ vm.name }}
 {% if kvm_user_data is defined %}
 {{ kvm_user_data }}
 {% endif %}
