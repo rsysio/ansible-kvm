@@ -2,8 +2,6 @@
 hostname: {{ vm.name }}
 fqdn: {{ vm.name }}.{{ kvm_domain_name }}
 manage_etc_hosts: true
-bootcmd:
-  - hostnamectl set-hostname {{ vm.name }}
 {% if kvm_user_data is defined %}
 {{ kvm_user_data }}
 {% endif %}
