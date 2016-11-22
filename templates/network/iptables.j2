@@ -22,7 +22,7 @@ COMMIT
 {% for vm in kvm_vms -%}
 {% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
 {% for port in vm.ports -%}
--A POSTROUTING -p tcp --dport {{ port.host }} DNAT --to {{ vm.ip }}:{{ port.guest }}
+-A POSTROUTING -p tcp --dport {{ port.host }} -j DNAT --to {{ vm.ip }}:{{ port.guest }}
 {% endfor -%}
 {% endif -%}
 {% endfor -%}
