@@ -17,6 +17,16 @@ COMMIT
 # Do not masquerade to these reserved address blocks.
 -A POSTROUTING -s {{ kvm_net.subnet }} -d 224.0.0.0/24 -j RETURN
 -A POSTROUTING -s {{ kvm_net.subnet }} -d 255.255.255.255/32 -j RETURN
+
+# forward ports to vms
+{% for vm in kvm_vms -%}
+{% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
+{% for port in vm.ports -%}
+-A POSTROUTING -p tcp --dport {{ port.host }} DNAT --to {{ vm.ip }}:{{ port.guest }}
+{% endfor -%}
+{% endif -%}
+{% endfor -%}
+
 # Masquerade all packets going from VMs to the LAN/Internet.
 -A POSTROUTING -s {{ kvm_net.subnet }} ! -d {{ kvm_net.subnet }} -p tcp -j MASQUERADE --to-ports 1024-65535
 -A POSTROUTING -s {{ kvm_net.subnet }} ! -d {{ kvm_net.subnet }} -p udp -j MASQUERADE --to-ports 1024-65535
@@ -40,6 +50,15 @@ COMMIT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p tcp -m tcp -j REJECT --reject-with tcp-reset
 -A INPUT -j REJECT --reject-with icmp-port-unreachable
+
+# forward ports to vms
+{% for vm in kvm_vms -%}
+{% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
+{% for port in vm.ports -%}
+-A FORWARD -p tcp -d {{ vm.ip }} --dport {{ port.guest }} -j ACCEPT
+{% endfor -%}
+{% endif -%}
+{% endfor -%}
 
 # Allow established traffic to the private subnet.
 -A FORWARD -d {{ kvm_net.subnet }} -o {{ kvm_net.bridge.name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
