@@ -22,7 +22,7 @@ COMMIT
 {% for vm in kvm_vms -%}
 {% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
 {% for port in vm.ports -%}
--A PREROUTING -p tcp --dport {{ port.host }} -j DNAT --to {{ vm.ip }}:{{ port.guest }}
+-A PREROUTING -d {{ ansible_default_ipv4.address }} -p tcp --dport {{ port.host }} -j DNAT --to {{ vm.ip }}:{{ port.guest }}
 {% endfor -%}
 {% endif -%}
 {% endfor -%}
