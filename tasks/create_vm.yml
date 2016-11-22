@@ -2,35 +2,29 @@
 
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
-    tags: vms
 
   - name: copy vm template
     command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
     register: image_file
     become: true
-    tags: vms
 
   - name: resize image
     command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
     when: image_file.changed
     become: true
-    tags: vms
 
   - name: create meta-data file
     template: "src=vm/meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
     register: user_data
-    tags: vms
 
   - name: create meta-data file
     template: "src=vm/user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
     register: meta_data
-    tags: vms
 
   - name: create config.iso
     command: "genisoimage -o {{ kvm_vm_dir }}/{{ vm.name }}/config.iso -V cidata -r -J {{ kvm_vm_dir }}/{{ vm.name }}/meta-data {{ kvm_vm_dir }}/{{ vm.name }}/user-data"
     when: image_file.changed or meta_data.changed or user_data.changed
     become: true
-    tags: vms
 
   - name: create VM mac
     command: >
@@ -50,7 +44,6 @@
             --nographics \
             --noautoconsole
     when: vm.mac is defined
-    tags: vms
 
   - name: create VM
     command: >
@@ -70,5 +63,4 @@
             --nographics \
             --noautoconsole
     when: vm.mac is not defined
-    tags: vms
 

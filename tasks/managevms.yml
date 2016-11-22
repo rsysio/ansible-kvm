@@ -4,15 +4,12 @@
     template: "src=dnsmasq/resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
     become: true
     notify: dnsmasq_reload
-    tags: vms
 
   - meta: flush_handlers
-    tags: vms
 
   - name: get existing VMs
     shell: "virsh list --all | grep -v '^$' | awk 'NR>2 {print $2}'"
     register: existing_vms
-    tags: vms
 
   - name: delete VMs
     include: del_vm.yml
@@ -20,7 +17,6 @@
         loop_var: vm
     with_items: "{{ existing_vms.stdout_lines }}"
     when: vm not in kvm_vms|map(attribute='name')|list
-    tags: vms
 
   - name: create VMs
     include: create_vm.yml
@@ -28,6 +24,5 @@
         loop_var: vm
     with_items: "{{ kvm_vms }}"
     when: vm.name not in existing_vms.stdout_lines
-    tags: vms
 
 
