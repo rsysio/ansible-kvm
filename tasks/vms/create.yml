@@ -23,7 +23,7 @@
 
   - name: create config.iso
     command: "genisoimage -o {{ kvm_vm_dir }}/{{ vm.name }}/config.iso -V cidata -r -J {{ kvm_vm_dir }}/{{ vm.name }}/meta-data {{ kvm_vm_dir }}/{{ vm.name }}/user-data"
-    when: image_file.changed or meta_data.changed or user_data.changed
+    when: meta_data.changed or user_data.changed
     become: true
 
   - name: create VM mac
