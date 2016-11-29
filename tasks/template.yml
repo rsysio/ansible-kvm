@@ -12,6 +12,6 @@
   - name: create raw template
     command: "qemu-img convert {{ kvm_template.qcow2 }} -O raw {{ kvm_template.raw }}"
     args:
-        creates: "{{ kvm_template.qcow2 }}"
+        creates: "{{ kvm_template.raw }}"
 
 
