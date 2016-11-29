@@ -12,14 +12,14 @@
     register: existing_vms
 
   - name: delete VMs
-    include: del_vm.yml
+    include: vms/delete.yml
     loop_control:
         loop_var: vm
     with_items: "{{ existing_vms.stdout_lines }}"
     when: vm not in kvm_vms|map(attribute='name')|list
 
   - name: create VMs
-    include: create_vm.yml
+    include: vms/create.yml
     loop_control:
         loop_var: vm
     with_items: "{{ kvm_vms }}"

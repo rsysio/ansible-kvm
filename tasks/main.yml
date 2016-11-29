@@ -25,13 +25,13 @@
       - kvm_network
 
   - name: download ubuntu image
-    include: data.yml
+    include: template.yml
     tags:
       - kvm
       - kvm_template
 
   - name: manage vms
-    include: managevms.yml
+    include: vms/manage.yml
     tags:
       - kvm
       - kvm_vms

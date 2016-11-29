@@ -3,14 +3,14 @@
   - name: create vm dir
     file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
 
-  - name: copy vm template
-    command: "cp {{ kvm_template.image }} {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2"
-    register: image_file
+  - name: create lv
+    command: "lvcreate {{ kvm_vol_group }} -n {{ vm.name }}_lv -L {{ vm.disk }}G"
+    args:
+        creates: "/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv"
     become: true
 
-  - name: resize image
-    command: "qemu-img resize {{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2 +{{ vm.disk }}GB"
-    when: image_file.changed
+  - name: copy image to lv
+    command: "dd if={{ kvm_template.raw }} of=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv"
     become: true
 
   - name: create meta-data file
@@ -35,10 +35,10 @@
             --hvm \
             --cpu host \
             --os-type=linux \
-            --os-variant=ubuntu16.04 \
-            --network bridge:{{ kvm_net.bridge.name }},mac={{ vm.mac }} \
+            --os-variant=ubuntuxenial \
+            --network model=virtio,bridge:{{ kvm_net.bridge.name }},mac={{ vm.mac }} \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
-            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
+            --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
             --import \
             --autostart \
             --nographics \
@@ -54,10 +54,10 @@
             --hvm \
             --cpu host \
             --os-type=linux \
-            --os-variant=ubuntu16.04 \
-            --network bridge:{{ kvm_net.bridge.name }} \
+            --os-variant=ubuntuxenial \
+            --network model=virtio,bridge:{{ kvm_net.bridge.name }} \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
-            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/{{ vm.name }}.qcow2,format=qcow2 \
+            --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
             --import \
             --autostart \
             --nographics \

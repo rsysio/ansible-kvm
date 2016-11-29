@@ -11,4 +11,8 @@
     ignore_errors: true
     become: true
 
+  - name: delete lv
+    command: "lvremove /dev/{{ kvm_vol_group }}/{{ vm.name }}_lv"
+    become: true
+
 
