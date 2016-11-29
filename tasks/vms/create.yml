@@ -37,7 +37,7 @@
             --hvm \
             --cpu host \
             --os-type=linux \
-            --os-variant=ubuntuxenial \
+            --os-variant=ubuntu16.04 \
             --network model=virtio,bridge={{ kvm_net.bridge.name }},mac={{ vm.mac }} \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
             --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
@@ -56,7 +56,7 @@
             --hvm \
             --cpu host \
             --os-type=linux \
-            --os-variant=ubuntuxenial \
+            --os-variant=ubuntu16.04 \
             --network model=virtio,bridge={{ kvm_net.bridge.name }} \
             --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
             --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
