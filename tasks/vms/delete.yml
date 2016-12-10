@@ -12,7 +12,7 @@
     become: true
 
   - name: delete lv
-    command: "lvremove /dev/{{ kvm_vol_group }}/{{ vm }}_lv"
+    command: "lvremove -f /dev/{{ kvm_vol_group }}/{{ vm }}_lv"
     become: true
 
 
