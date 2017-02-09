@@ -33,6 +33,8 @@ COMMIT
 -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 # Accept SSH connections.
 -A INPUT -p tcp -m tcp --syn -m conntrack --ctstate NEW --dport 22 -j ACCEPT
+# OpenVpn.
+-A INPUT -p tcp -m udp --syn -m conntrack --ctstate NEW --dport 1194 -j ACCEPT
 # Accept DNS (port 53) and DHCP (port 67) packets from VMs.
 -A INPUT -i {{ bridge.name }} -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
 -A INPUT -i {{ bridge.name }} -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
