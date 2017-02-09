@@ -1,0 +1,14 @@
+#cloud-config
+hostname: {{ vm.name }}
+fqdn: {{ vm.name }}.{{ kvm_domain_name }}
+manage_etc_hosts: true
+bootcmd:
+  - hostname {{ vm.name }}
+  - systemctl restart networking.service
+{% if kvm_user_data is defined %}
+{{ kvm_user_data }}
+{% endif %}
+{% if vm.user_data is defined %}
+{{ vm.user_data }}
+{% endif %}
+

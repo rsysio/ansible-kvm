@@ -1,0 +1,17 @@
+---
+
+  - name: create data dir
+    file: path={{ kvm_vm_dir }} state=directory mode=0755
+
+  - name: create template dir
+    file: path={{ kvm_template.dir }} state=directory mode=0755
+
+  - name: download template
+    get_url: url={{ kvm_template.url }} dest={{ kvm_template.qcow2 }}
+
+  - name: create raw template
+    command: "qemu-img convert {{ kvm_template.qcow2 }} -O raw {{ kvm_template.raw }}"
+    args:
+        creates: "{{ kvm_template.raw }}"
+
+

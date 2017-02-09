@@ -1,0 +1,68 @@
+---
+
+  - name: create vm dir
+    file: "path={{ kvm_vm_dir }}/{{ vm.name }} state=directory"
+
+  - name: create lv
+    command: "lvcreate {{ kvm_vol_group }} -n {{ vm.name }}_lv -L {{ vm.disk }}G"
+    args:
+        creates: "/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv"
+    become: true
+
+  - name: copy image to lv
+    command: "dd if={{ kvm_template.raw }} of=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv"
+    become: true
+
+  - name: create meta-data file
+    template: "src=vm/meta-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/meta-data"
+    register: user_data
+
+  - name: create meta-data file
+    template: "src=vm/user-data.j2 dest={{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    register: meta_data
+
+  - name: create config.iso
+    command: "genisoimage -o {{ kvm_vm_dir }}/{{ vm.name }}/config.iso -V cidata -r -J {{ kvm_vm_dir }}/{{ vm.name }}/meta-data {{ kvm_vm_dir }}/{{ vm.name }}/user-data"
+    args:
+        creates: "{{ kvm_vm_dir }}/{{ vm.name }}/config.iso"
+    when: meta_data.changed or user_data.changed
+    become: true
+
+  - name: create VM mac
+    command: >
+        virt-install \
+            --name {{ vm.name }} \
+            --vcpus {{ vm.cpu }} \
+            --ram {{ vm.ram }} \
+            --hvm \
+            --cpu host \
+            --os-type=linux \
+            --os-variant=ubuntu16.04 \
+            --network model=virtio,bridge={{ kvm_net.bridge.name }},mac={{ vm.mac }} \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
+            --import \
+            --autostart \
+            --nographics \
+            --noautoconsole
+    when: vm.mac is defined
+
+  - name: create VM
+    command: >
+        virt-install \
+            --name {{ vm.name }} \
+            --vcpus {{ vm.cpu }} \
+            --ram {{ vm.ram }} \
+            --hvm \
+            --cpu host \
+            --os-type=linux \
+            --os-variant=ubuntu16.04 \
+            --network model=virtio,bridge={{ kvm_net.bridge.name }} \
+            --disk path={{ kvm_vm_dir }}/{{ vm.name }}/config.iso,device=cdrom \
+            --disk path=/dev/{{ kvm_vol_group }}/{{ vm.name }}_lv,size={{ vm.disk }},bus=virtio,sparse=false,format=raw \
+            --import \
+            --autostart \
+            --nographics \
+            --noautoconsole
+    when: vm.mac is not defined
+

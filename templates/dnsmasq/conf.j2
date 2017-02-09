@@ -1,23 +1,26 @@
 # Only bind to the virtual bridge. This avoids conflicts with other running
 # dnsmasq instances.
-except-interface=lo
-interface={{ bridge.name }}
+except-interface=eth0
 bind-dynamic
 
+addn-hosts=/etc/dnsmasq.hosts
+
 # IPv4 addresses to offer to VMs. This should match the chosen subnet.
-dhcp-range={{ bridge.dhcp.first }},{{ bridge.dhcp.last }}
+dhcp-range={{ kvm_net.dhcp.first }},{{ kvm_net.dhcp.last }},1h
 
 # Set this to at least the total number of addresses in DHCP-enabled subnets.
-dhcp-lease-max=1000
+dhcp-lease-max=200
 
 # File to write DHCP lease information to.
-dhcp-leasefile=/var/lib/libvirt/dnsmasq/{{ bridge.name }}.leases
+dhcp-leasefile=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.leases
 
 # File to read DHCP host information from.
-dhcp-hostsfile=/var/lib/libvirt/dnsmasq/{{ bridge.name }}.hostsfile
+dhcp-hostsfile=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile
 
 # Avoid problems with old or broken clients.
 dhcp-no-override
 
 # https://www.redhat.com/archives/libvir-list/2010-March/msg00038.html
 strict-order
+
+domain={{ kvm_domain_name }}

@@ -1,0 +1,8 @@
+auto {{ kvm_net.bridge.name }}
+iface {{ kvm_net.bridge.name }} inet static
+    # Make sure bridge-utils is installed!
+    bridge_ports {{ kvm_net.dummy.name }}
+    bridge_stp on
+    bridge_fd 2
+    address {{ kvm_net.bridge.ip }}
+    netmask {{ kvm_net.mask }}

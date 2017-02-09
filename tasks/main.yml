@@ -2,15 +2,38 @@
 
   - name: Install base apps
     include: install.yml
+    tags:
+      - kvm
+      - kvm_install
 
   - name: setup network
     include: network.yml
+    tags:
+      - kvm
+      - kvm_network
 
   - name: configure iptables
     include: iptables.yml
+    tags:
+      - kvm
+      - kvm_network
 
   - name: setup dnsmasq
     include: dnsmasq.yml
+    tags:
+      - kvm
+      - kvm_network
 
   - name: download ubuntu image
-    include: download.yml
+    include: template.yml
+    tags:
+      - kvm
+      - kvm_template
+
+  - name: manage vms
+    include: vms/manage.yml
+    tags:
+      - kvm
+      - kvm_vms
+      - manage_vms
+      - vms

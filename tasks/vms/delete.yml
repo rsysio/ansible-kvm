@@ -1,0 +1,18 @@
+---
+
+  - name: destroy VM
+    command: virsh destroy {{ vm }}
+
+  - name: undefine VM
+    command: virsh undefine {{ vm }}
+
+  - name: delete VM files
+    file: "path={{ kvm_vm_dir }}/{{ vm }} state=absent"
+    ignore_errors: true
+    become: true
+
+  - name: delete lv
+    command: "lvremove -f /dev/{{ kvm_vol_group }}/{{ vm }}_lv"
+    become: true
+
+

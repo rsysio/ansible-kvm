@@ -1,0 +1,8 @@
+instance-id: {{ vm.name }}
+local-hostname: {{ vm.name }}
+{% if kvm_meta_data is defined %}
+{{ kvm_meta_data }}
+{% endif %}
+{% if vm.meta_data is defined %}
+{{ vm.meta_data }}
+{% endif %}

@@ -1,0 +1,28 @@
+---
+
+  - name: reserve IP address
+    template: "src=dnsmasq/resv.j2 dest=/var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
+    become: true
+    notify: dnsmasq_reload
+
+  - meta: flush_handlers
+
+  - name: get existing VMs
+    shell: "virsh list --all | grep -v '^$' | awk 'NR>2 {print $2}'"
+    register: existing_vms
+
+  - name: delete VMs
+    include: delete.yml
+    loop_control:
+        loop_var: vm
+    with_items: "{{ existing_vms.stdout_lines }}"
+    when: vm not in kvm_vms|map(attribute='name')|list
+
+  - name: create VMs
+    include: create.yml
+    loop_control:
+        loop_var: vm
+    with_items: "{{ kvm_vms }}"
+    when: vm.name not in existing_vms.stdout_lines
+
+
