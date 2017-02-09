@@ -18,6 +18,8 @@ COMMIT
 -A POSTROUTING -s {{ kvm_net.subnet }} -d 224.0.0.0/24 -j RETURN
 -A POSTROUTING -s {{ kvm_net.subnet }} -d 255.255.255.255/32 -j RETURN
 
+-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+
 # forward ports to vms
 {% for vm in kvm_vms -%}
 {% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
@@ -37,17 +39,22 @@ COMMIT
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
+
 # Allow basic INPUT traffic.
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+
 # Accept SSH connections.
 -A INPUT -p tcp -m tcp --syn -m conntrack --ctstate NEW --dport 22 -j ACCEPT
+
 # OpenVpn
--A INPUT -p udp -m tcp --syn -m conntrack --ctstate NEW --dport 1194 -j ACCEPT
+-A INPUT -m state --state NEW -p udp --dport 1194 -j ACCEPT
+
 # Accept DNS (port 53) and DHCP (port 67) packets from VMs.
 -A INPUT -i {{ kvm_net.bridge.name }} -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
 -A INPUT -i {{ kvm_net.bridge.name }} -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
+
 # Reject everything else.
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p tcp -m tcp -j REJECT --reject-with tcp-reset
@@ -61,6 +68,11 @@ COMMIT
 {% endfor -%}
 {% endif -%}
 {% endfor -%}
+
+# OpenVpn
+-A FORWARD -i tun+ -j ACCEPT
+-A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -i eth0 -o tun+ -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 # Allow established traffic to the private subnet.
 -A FORWARD -d {{ kvm_net.subnet }} -o {{ kvm_net.bridge.name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
