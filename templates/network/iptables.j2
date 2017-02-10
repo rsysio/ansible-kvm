@@ -21,7 +21,7 @@ COMMIT
 -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
 
 # forward ports to vms
-{% for vm in kvm_vms -%}
+{% for vm in kvm_vms_create -%}
 {% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
 {% for port in vm.ports -%}
 -A PREROUTING -d {{ ansible_default_ipv4.address }} -p tcp --dport {{ port.host }} -j DNAT --to {{ vm.ip }}:{{ port.guest }}
@@ -65,7 +65,7 @@ COMMIT
 -A INPUT -j REJECT --reject-with icmp-port-unreachable
 
 # forward ports to vms
-{% for vm in kvm_vms -%}
+{% for vm in kvm_vms_create -%}
 {% if vm.ip is defined and vm.mac is defined and vm.ports is defined -%}
 {% for port in vm.ports -%}
 -A FORWARD -p tcp -d {{ vm.ip }} --dport {{ port.guest }} -j ACCEPT

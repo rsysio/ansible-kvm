@@ -1,4 +1,4 @@
-{% for vms in kvm_vms %}
+{% for vms in kvm_vms_create %}
 {% if vms.ip is defined and vms.mac is defined %}
 {{ vms.mac }},{{ vms.ip }}
 {% endif %}

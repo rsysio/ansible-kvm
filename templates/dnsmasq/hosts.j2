@@ -1,4 +1,4 @@
-{% for vms in kvm_vms %}
+{% for vms in kvm_vms_create %}
 {% if vms.ip is defined %}
 {{ vms.ip }} {{ vms.name }} {{ vms.name }}.{{ kvm_domain_name }}
 {% endif %}
