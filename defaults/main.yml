@@ -39,8 +39,8 @@ kvm_net:
 #        list: |
 #            ubuntu:password
 
-# define VMs
-kvm_vms_create:
+# define VMs to create
+#kvm_vms_create:
 #  - name: vm0
 #    disk: 20
 #    cpu: 1
@@ -51,4 +51,6 @@ kvm_vms_create:
 #      - host: 8080
 #        guest: 8080
 
-kvm_vms_delete:
+# define VM names to delete
+#kvm_vms_delete:
+# - vm1
