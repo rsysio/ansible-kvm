@@ -16,13 +16,13 @@
     loop_control:
         loop_var: vm
     with_items: "{{ existing_vms.stdout_lines }}"
-    when: vm not in kvm_vms|map(attribute='name')|list
+    when: vm not in kvm_vms_delete|map(attribute='name')|list
 
   - name: create VMs
     include: create.yml
     loop_control:
         loop_var: vm
-    with_items: "{{ kvm_vms }}"
+    with_items: "{{ kvm_vms_create }}"
     when: vm.name not in existing_vms.stdout_lines
 
 

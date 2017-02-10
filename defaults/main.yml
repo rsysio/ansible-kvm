@@ -40,14 +40,15 @@ kvm_net:
 #            ubuntu:password
 
 # define VMs
-kvm_vms:
-  - name: vm0
-    disk: 20
-    cpu: 1
-    ram: 512
-    mac: "52:54:00:b7:bc:ee"
-    ip: "{{ kvm_netocts }}.100"
-    ports:
-      - host: 8080
-        guest: 8080
+kvm_vms_create:
+#  - name: vm0
+#    disk: 20
+#    cpu: 1
+#    ram: 512
+#    mac: "52:54:00:b7:bc:ee"
+#    ip: "{{ kvm_netocts }}.100"
+#    ports:
+#      - host: 8080
+#        guest: 8080
 
+kvm_vms_delete:
