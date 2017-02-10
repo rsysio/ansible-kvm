@@ -55,6 +55,10 @@ COMMIT
 -A INPUT -i {{ kvm_net.bridge.name }} -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
 -A INPUT -i {{ kvm_net.bridge.name }} -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
 
+# Accept DNS (port 53) and DHCP (port 67) packets from VPN.
+-A INPUT -i tun+ -p udp -m udp -m multiport --dports 53,67 -j ACCEPT
+-A INPUT -i tun+ -p tcp -m tcp -m multiport --dports 53,67 -j ACCEPT
+
 # Reject everything else.
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p tcp -m tcp -j REJECT --reject-with tcp-reset
