@@ -5,7 +5,7 @@
     become: true
 
   - name: add conf file
-    template: src=dnsmasq/conf.j2 dest=/etc/dnsmasq.d/dnsmasq.conf
+    template: src=dnsmasq/conf.j2 dest=/etc/dnsmasq.conf
     become: true
     notify: dnsmasq_reload
 
