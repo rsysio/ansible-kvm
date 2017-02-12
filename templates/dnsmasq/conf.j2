@@ -4,6 +4,26 @@ except-interface=eth0
 bind-dynamic
 
 addn-hosts=/etc/dnsmasq.hosts
+#
+# Logging
+#
+
+log-facility=/var/log/dnsmasq.log
+log-queries
+
+#
+# Name resolution options
+#
+
+domain-needed
+bogus-priv
+no-hosts
+dns-forward-max=150
+cache-size=1000
+#no-negcache
+neg-ttl=3600
+resolv-file=/etc/resolv.dnsmasq
+no-poll
 
 # IPv4 addresses to offer to VMs. This should match the chosen subnet.
 dhcp-range={{ kvm_net.dhcp.first }},{{ kvm_net.dhcp.last }},1h

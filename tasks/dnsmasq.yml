@@ -14,6 +14,11 @@
     become: true
     notify: dnsmasq_reload
 
+  - name: add dnsmasq resolv file
+    copy: src=resolv.dnsmasq dest=/etc/resolv.dnsmasq
+    become: true
+    notify: dnsmasq_reload
+
   - name: create hosts file
     command: "touch /var/lib/libvirt/dnsmasq/{{ kvm_net.bridge.name }}.hostsfile"
     args:
