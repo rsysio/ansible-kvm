@@ -29,4 +29,10 @@
     apt: pkg=dnsmasq
     become: true
 
+  - name: update dnsmasq systemd file
+    file: src=files/dnsmasq.service dest=/lib/systemd/system/dnsmasq.service
+    become: true
+    notify:
+        - systemd_reload
+        - dnsmasq_reload
 

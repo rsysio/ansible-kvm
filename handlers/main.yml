@@ -4,6 +4,10 @@
     command: sysctl -p
     become: true
 
+  - name: systemd_reload
+    command: systemctl daemon-reload
+    become: true
+
   - name: refresh_pool
     command: virsh pool-refresh images
 
